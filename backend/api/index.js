@@ -17,13 +17,15 @@ app.use(cors());
 app.use(express.json());
 
 // Serverless-safe DB connection
-let isConnected = false;
-
-async function connectDB() {
-  if (isConnected) return;
-  await mongoose.connect(process.env.MONGO_URI);
-  isConnected = true;
-}
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return;
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected ✅");
+  } catch (error) {
+    console.error("MongoDB connection error ❌:", error);
+  }
+};
 
 // Connect DB when any request comes
 app.use(async (req, res, next) => {

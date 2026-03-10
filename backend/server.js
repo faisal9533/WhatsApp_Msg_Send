@@ -1,4 +1,4 @@
-const app = require('./api/vercalserver');
+const app = require('./api/index');
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
